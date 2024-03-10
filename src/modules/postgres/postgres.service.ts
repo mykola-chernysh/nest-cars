@@ -20,7 +20,8 @@ export class PostgresService implements TypeOrmOptionsFactory {
       username: postgresConfig.user,
       password: postgresConfig.password,
       database: postgresConfig.dbName,
-      entities: [path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js')],
+      entities: [path.join(process.cwd(), 'dist', 'src', 'database', 'entities', '*.entity.js')],
+      migrations: [path.join(process.cwd(), 'dist', 'src', 'database', 'migrations', '*.js')],
       synchronize: false,
     };
   }

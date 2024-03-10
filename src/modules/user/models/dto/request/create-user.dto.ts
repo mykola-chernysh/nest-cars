@@ -22,4 +22,10 @@ export class CreateUserDto {
 
   @IsString()
   role: string;
+
+  @IsString()
+  account: string;
+
+  @IsString()
+  image?: string;
 }
