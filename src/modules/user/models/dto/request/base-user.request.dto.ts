@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { IsOptional, IsString, Length, Matches } from 'class-validator';
 
+import { EAccount } from '../../../../../common/enums/account.enum';
+import { ERole } from '../../../../../common/enums/role.enum';
 import { TransformHelper } from '../../../../../common/helpers/transform.helper';
-import { EAccount } from '../../../../../database/entities/enums/account.enum';
-import { ERole } from '../../../../../database/entities/enums/role.enum';
 
 export class BaseUserRequestDto {
   @IsString()

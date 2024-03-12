@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-import { IUserData } from '../interfaces/user-data.interface';
+import { IUserData } from '../models/interfaces/user-data.interface';
 
 export const CurrentUser = createParamDecorator<IUserData>((data: unknown, ctx: ExecutionContext) => {
   const request = ctx.switchToHttp().getRequest();

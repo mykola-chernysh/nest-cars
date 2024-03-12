@@ -1,8 +1,8 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
+import { EAccount } from '../../common/enums/account.enum';
+import { ERole } from '../../common/enums/role.enum';
 import { CarEntity } from './car.entity';
-import { EAccount } from './enums/account.enum';
-import { ERole } from './enums/role.enum';
 import { BaseEntity } from './models/base.entity';
 import { RefreshTokenEntity } from './refresh-token.entity';
 

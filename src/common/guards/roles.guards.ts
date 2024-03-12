@@ -1,14 +1,17 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { UserRepository } from '../../repository/services/user.repository';
-import { SKIP_AUTH } from '../models/constants/constants';
-import { TokenType } from '../models/enums/token-type.enum';
-import { AuthCacheService } from '../services/auth-cache.service';
-import { TokenService } from '../services/token.service';
+import { CurrentUser } from '../../modules/auth/decorators/current-user.decorator';
+import { ROLES_KEY } from '../../modules/auth/decorators/role.decorator';
+import { TokenType } from '../../modules/auth/models/enums/token-type.enum';
+import { IUserData } from '../../modules/auth/models/interfaces/user-data.interface';
+import { AuthCacheService } from '../../modules/auth/services/auth-cache.service';
+import { TokenService } from '../../modules/auth/services/token.service';
+import { UserRepository } from '../../modules/repository/services/user.repository';
+import { ERole } from '../enums/role.enum';
 
 @Injectable()
-export class JwtAccessGuard implements CanActivate {
+export class RolesGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private tokenService: TokenService,
@@ -17,8 +20,14 @@ export class JwtAccessGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const skipAuth = this.reflector.getAllAndOverride<boolean>(SKIP_AUTH, [context.getHandler(), context.getClass()]);
-    if (skipAuth) return true;
+    const requiredRoles = this.reflector.getAllAndOverride<ERole[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (!requiredRoles) {
+      return true;
+    }
 
     const request = context.switchToHttp().getRequest();
 
@@ -40,16 +49,11 @@ export class JwtAccessGuard implements CanActivate {
     const user = await this.userRepository.findOneBy({
       id: payload.userId,
     });
+
     if (!user) {
       throw new UnauthorizedException();
     }
 
-    request.user = {
-      userId: user.id,
-      email: user.email,
-      userRole: user.role,
-    };
-
-    return true;
+    return requiredRoles.some((role) => user.role?.includes(role));
   }
 }

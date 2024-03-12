@@ -3,9 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 import { Config, JWTConfig } from '../../../configs/config.type';
-import { TokenResponseDto } from '../dto/response/token.response.dto';
-import { TokenType } from '../enums/token-type.enum';
-import { JwtPayload } from '../types/jwt-payload.type';
+import { TokenResponseDto } from '../models/dto/response/token.response.dto';
+import { TokenType } from '../models/enums/token-type.enum';
+import { JwtPayload } from '../models/types/jwt-payload.type';
 
 @Injectable()
 export class TokenService {

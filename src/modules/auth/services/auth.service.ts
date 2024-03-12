@@ -1,14 +1,14 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { RefreshTokenRepository } from '../../repository/services/refresh-token.repository';
 import { UserRepository } from '../../repository/services/user.repository';
 import { UserService } from '../../user/services/user.service';
-import { SignInRequestDto } from '../dto/request/sign-in.request.dto';
-import { SignUpRequestDto } from '../dto/request/sign-up.request.dto';
-import { AuthUserResponseDto } from '../dto/response/auth-user.response.dto';
-import { TokenResponseDto } from '../dto/response/token.response.dto';
-import { IUserData } from '../interfaces/user-data.interface';
+import { SignInRequestDto } from '../models/dto/request/sign-in.request.dto';
+import { SignUpRequestDto } from '../models/dto/request/sign-up.request.dto';
+import { AuthUserResponseDto } from '../models/dto/response/auth-user.response.dto';
+import { TokenResponseDto } from '../models/dto/response/token.response.dto';
+import { IUserData } from '../models/interfaces/user-data.interface';
 import { AuthMapper } from './auth.mapper';
 import { AuthCacheService } from './auth-cache.service';
 import { TokenService } from './token.service';
@@ -32,6 +32,7 @@ export class AuthService {
 
     const tokens = await this.tokenService.generateAuthTokens({
       userId: user.id,
+      userRole: user.role,
     });
 
     await Promise.all([
@@ -61,6 +62,7 @@ export class AuthService {
 
     const tokens = await this.tokenService.generateAuthTokens({
       userId: user.id,
+      userRole: user.role,
     });
 
     await Promise.all([
@@ -101,6 +103,7 @@ export class AuthService {
 
     const tokens = await this.tokenService.generateAuthTokens({
       userId: user.id,
+      userRole: user.role,
     });
 
     await Promise.all([

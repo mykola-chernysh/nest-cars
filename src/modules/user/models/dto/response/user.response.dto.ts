@@ -1,9 +1,9 @@
 export class UserResponseDto {
-  id: string;
-
+  id?: string;
+  firstName: string;
+  lastName: string;
   email: string;
-
-  role: string;
-
-  account: string;
+  role?: string;
+  account?: string;
+  image?: string;
 }

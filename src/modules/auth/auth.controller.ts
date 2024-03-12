@@ -3,12 +3,12 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { CurrentUser } from './decorators/current-user.decorator';
 import { SkipAuth } from './decorators/skip-auth.decorator';
-import { SignInRequestDto } from './dto/request/sign-in.request.dto';
-import { SignUpRequestDto } from './dto/request/sign-up.request.dto';
-import { AuthUserResponseDto } from './dto/response/auth-user.response.dto';
-import { TokenResponseDto } from './dto/response/token.response.dto';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
-import { IUserData } from './interfaces/user-data.interface';
+import { SignInRequestDto } from './models/dto/request/sign-in.request.dto';
+import { SignUpRequestDto } from './models/dto/request/sign-up.request.dto';
+import { AuthUserResponseDto } from './models/dto/response/auth-user.response.dto';
+import { TokenResponseDto } from './models/dto/response/token.response.dto';
+import { IUserData } from './models/interfaces/user-data.interface';
 import { AuthService } from './services/auth.service';
 
 @ApiTags('Auth')

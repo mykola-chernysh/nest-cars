@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 
 import { RefreshTokenRepository } from '../../repository/services/refresh-token.repository';
 import { UserRepository } from '../../repository/services/user.repository';
-import { TokenType } from '../enums/token-type.enum';
+import { TokenType } from '../models/enums/token-type.enum';
 import { TokenService } from '../services/token.service';
 
 @Injectable()
@@ -15,10 +15,12 @@ export class JwtRefreshGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+
     const refreshToken = request.get('Authorization')?.split('Bearer ')[1];
     if (!refreshToken) {
       throw new UnauthorizedException();
     }
+
     const payload = await this.tokenService.verifyToken(refreshToken, TokenType.REFRESH);
     if (!payload) {
       throw new UnauthorizedException();
