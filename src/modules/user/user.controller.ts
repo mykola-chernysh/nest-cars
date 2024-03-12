@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { CreateUserDto } from './models/dto/request/create-user.dto';
-import { UpdateUserDto } from './models/dto/request/update-user.dto';
+import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
+import { UpdateUserRequestDto } from './models/dto/request/update-user.request.dto';
 import { UserService } from './services/user.service';
 
 @ApiTags('User')
@@ -10,31 +10,39 @@ import { UserService } from './services/user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  public async create(@Body() createUserDto: CreateUserDto): Promise<string> {
-    return await this.userService.create(createUserDto);
-  }
+  // @SkipAuth()
+  // @Post()
+  // public async create(@Body() createUserDto: BaseUserRequestDto): Promise<string> {
+  //   return await this.userService.create(createUserDto);
+  // }
 
-  @Get()
-  public async findAll(): Promise<string> {
-    return await this.userService.findAll();
-  }
+  // @SkipAuth()
+  // @Get()
+  // public async findAll(): Promise<string> {
+  //   return await this.userService.findAll();
+  // }
 
-  @ApiBearerAuth()
+  @SkipAuth()
   @Get(':id')
   public async findOne(@Param('id') id: string): Promise<string> {
     return await this.userService.findOne(+id);
   }
 
   @ApiBearerAuth()
-  @Patch(':id')
-  public async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<string> {
-    return await this.userService.update(+id, updateUserDto);
+  @Get('me')
+  public async findMy(): Promise<string> {
+    return await this.userService.findOne(1);
   }
 
   @ApiBearerAuth()
-  @Delete(':id')
-  public async remove(@Param('id') id: string): Promise<string> {
-    return await this.userService.remove(+id);
+  @Put('me')
+  public async update(@Body() updateUserDto: UpdateUserRequestDto): Promise<string> {
+    return await this.userService.update(1, updateUserDto);
+  }
+
+  @ApiBearerAuth()
+  @Delete('me')
+  public async remove(): Promise<string> {
+    return await this.userService.remove(1);
   }
 }
