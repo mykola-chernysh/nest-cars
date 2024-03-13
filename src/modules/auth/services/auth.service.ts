@@ -33,6 +33,7 @@ export class AuthService {
     const tokens = await this.tokenService.generateAuthTokens({
       userId: user.id,
       userRole: user.role,
+      userAccount: user.account,
     });
 
     await Promise.all([
@@ -63,6 +64,7 @@ export class AuthService {
     const tokens = await this.tokenService.generateAuthTokens({
       userId: user.id,
       userRole: user.role,
+      userAccount: user.account,
     });
 
     await Promise.all([
@@ -104,6 +106,7 @@ export class AuthService {
     const tokens = await this.tokenService.generateAuthTokens({
       userId: user.id,
       userRole: user.role,
+      userAccount: user.account,
     });
 
     await Promise.all([
