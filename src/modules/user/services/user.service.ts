@@ -83,7 +83,7 @@ export class UserService {
   //   return `This action removes a #${id} user`;
   // }
 
-  public async isEmailExist(email: string): Promise<void> {
+  public async isEmailExistORThrow(email: string): Promise<void> {
     const user = await this.userRepository.findOneBy({ email });
 
     if (user) {

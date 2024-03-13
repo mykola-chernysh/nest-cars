@@ -7,6 +7,5 @@ export class BaseAuthRequestDto extends PickType(BaseUserRequestDto, [
   'lastName',
   'email',
   'password',
-  'role',
   'account',
 ]) {}

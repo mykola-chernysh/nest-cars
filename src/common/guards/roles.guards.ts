@@ -2,12 +2,12 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Reflector } from '@nestjs/core';
 
 import { CurrentUser } from '../../modules/auth/decorators/current-user.decorator';
-import { ROLES_KEY } from '../../modules/auth/decorators/role.decorator';
 import { TokenType } from '../../modules/auth/models/enums/token-type.enum';
 import { IUserData } from '../../modules/auth/models/interfaces/user-data.interface';
 import { AuthCacheService } from '../../modules/auth/services/auth-cache.service';
 import { TokenService } from '../../modules/auth/services/token.service';
 import { UserRepository } from '../../modules/repository/services/user.repository';
+import { ROLES_KEY } from '../decorators/role.decorator';
 import { ERole } from '../enums/role.enum';
 
 @Injectable()

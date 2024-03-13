@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 
 import { RefreshTokenRepository } from '../../repository/services/refresh-token.repository';
 import { UserRepository } from '../../repository/services/user.repository';
+import { BaseUserRequestDto } from '../../user/models/dto/request/base-user.request.dto';
 import { UserService } from '../../user/services/user.service';
 import { SignInRequestDto } from '../models/dto/request/sign-in.request.dto';
 import { SignUpRequestDto } from '../models/dto/request/sign-up.request.dto';
@@ -23,8 +24,26 @@ export class AuthService {
     private readonly refreshRepository: RefreshTokenRepository,
   ) {}
 
+  public async isSuperAdminExist(email: string): Promise<BaseUserRequestDto> {
+    return await this.userRepository.findOneBy({ email });
+  }
+
+  public async createSuperAdmin(dto: SignUpRequestDto): Promise<BaseUserRequestDto> {
+    const password = await bcrypt.hash(dto.password, 10);
+
+    return await this.userRepository.save(this.userRepository.create({ ...dto, password }));
+  }
+
+  public async createUserByAdmin(dto: SignUpRequestDto): Promise<BaseUserRequestDto> {
+    await this.userService.isEmailExistORThrow(dto.email);
+
+    const password = await bcrypt.hash(dto.password, 10);
+
+    return await this.userRepository.save(this.userRepository.create({ ...dto, password }));
+  }
+
   public async signUp(dto: SignUpRequestDto): Promise<AuthUserResponseDto> {
-    await this.userService.isEmailExist(dto.email);
+    await this.userService.isEmailExistORThrow(dto.email);
 
     const password = await bcrypt.hash(dto.password, 10);
 

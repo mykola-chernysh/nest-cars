@@ -1,6 +1,9 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { Roles } from '../../common/decorators/role.decorator';
+import { ERole } from '../../common/enums/role.enum';
+import { BaseUserRequestDto } from '../user/models/dto/request/base-user.request.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { SkipAuth } from './decorators/skip-auth.decorator';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
@@ -44,5 +47,13 @@ export class AuthController {
   @Post('refresh')
   public async updateRefreshToken(@CurrentUser() userData: IUserData): Promise<TokenResponseDto> {
     return await this.authService.refreshToken(userData);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create any user' })
+  @Post('create-user')
+  @Roles(ERole.ADMIN)
+  public async createUserByAdmin(@Body() dto: SignUpRequestDto): Promise<BaseUserRequestDto> {
+    return await this.authService.createUserByAdmin(dto);
   }
 }

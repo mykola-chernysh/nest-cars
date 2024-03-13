@@ -32,7 +32,7 @@ export class BaseUserRequestDto {
 
   @ApiProperty({ enum: ERole, default: ERole.BUYER })
   @IsString()
-  role: ERole;
+  role?: ERole;
 
   @IsOptional()
   @ApiProperty({ enum: EAccount, default: EAccount.BASE })
