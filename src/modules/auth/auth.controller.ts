@@ -50,7 +50,7 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create any user' })
+  @ApiOperation({ summary: 'Create a manager' })
   @Post('create-user')
   @Roles(ERole.ADMIN)
   public async createUserByAdmin(@Body() dto: SignUpRequestDto): Promise<BaseUserRequestDto> {

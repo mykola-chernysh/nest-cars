@@ -4,6 +4,7 @@ import { APP_GUARD } from '@nestjs/core';
 
 import { RolesGuard } from '../common/guards/roles.guards';
 import configuration from '../configs/configs';
+import { AdvertisementModule } from './advertisement/advertisement.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
 import { PostgresModule } from './postgres/postgres.module';
@@ -21,6 +22,7 @@ import { UserModule } from './user/user.module';
     }),
     AuthModule,
     UserModule,
+    AdvertisementModule,
     HealthModule,
     RepositoryModule,
   ],

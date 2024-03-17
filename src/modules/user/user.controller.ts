@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Put } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
@@ -18,12 +18,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get my info' })
   @Get('me')
   public async findMe(@CurrentUser() userData: IUserData): Promise<UserResponseDto> {
     return await this.userService.findMe(userData);
   }
 
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update my info' })
   @Put('me')
   public async updateMe(
     @CurrentUser() userData: IUserData,
@@ -33,6 +35,7 @@ export class UserController {
   }
 
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update my role' })
   @Put('me/change-role')
   public async updateMyRole(
     @CurrentUser() userData: IUserData,
@@ -42,6 +45,7 @@ export class UserController {
   }
 
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update my account type' })
   @Put('me/change-type-account')
   public async updateMyAccount(
     @CurrentUser() userData: IUserData,
@@ -51,24 +55,9 @@ export class UserController {
   }
 
   @SkipAuth()
+  @ApiOperation({ summary: 'Get a public user' })
   @Get(':id')
   public async getPublicUser(@Param('id', ParseUUIDPipe) userId: string): Promise<UserResponseDto> {
     return await this.userService.getPublicUser(userId);
   }
-
-  // @ApiBearerAuth()
-  // @Delete('me')
-  // public async remove(): Promise<string> {
-  //   return await this.userService.remove(1);
-  // }
-
-  // @Post()
-  // public async create(@Body() createUserDto: BaseUserRequestDto): Promise<string> {
-  //   return await this.userService.create(createUserDto);
-  // }
-  //
-  // @Get()
-  // public async findAll(): Promise<string> {
-  //   return await this.userService.findAll();
-  // }
 }

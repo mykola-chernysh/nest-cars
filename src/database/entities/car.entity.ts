@@ -14,7 +14,7 @@ export class CarEntity extends BaseEntity {
   @Column('text')
   color: string;
 
-  @Column('text', { select: false })
+  @Column('text')
   price: string;
 
   @Column('text')

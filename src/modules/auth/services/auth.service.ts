@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
+import { ERole } from '../../../common/enums/role.enum';
 import { RefreshTokenRepository } from '../../repository/services/refresh-token.repository';
 import { UserRepository } from '../../repository/services/user.repository';
 import { BaseUserRequestDto } from '../../user/models/dto/request/base-user.request.dto';
@@ -39,7 +40,7 @@ export class AuthService {
 
     const password = await bcrypt.hash(dto.password, 10);
 
-    return await this.userRepository.save(this.userRepository.create({ ...dto, password }));
+    return await this.userRepository.save(this.userRepository.create({ ...dto, role: ERole.MANAGER, password }));
   }
 
   public async signUp(dto: SignUpRequestDto): Promise<AuthUserResponseDto> {

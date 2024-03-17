@@ -79,10 +79,6 @@ export class UserService {
     return UserMapper.toPublicUserResponseDto(publicUserEntity);
   }
 
-  // public async remove(id: number): Promise<string> {
-  //   return `This action removes a #${id} user`;
-  // }
-
   public async isEmailExistORThrow(email: string): Promise<void> {
     const user = await this.userRepository.findOneBy({ email });
 

@@ -10,6 +10,7 @@ export class BaseUserRequestDto {
   @IsString()
   @Length(3, 30)
   @Transform(TransformHelper.trim)
+  @Type(() => String)
   firstName: string;
 
   @IsString()
