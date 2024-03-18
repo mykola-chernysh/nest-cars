@@ -9,6 +9,7 @@ import { CurrencyMapper } from './currency.mapper';
 @Injectable()
 export class BankService {
   private bankConfig: BankConfig;
+
   constructor(
     private readonly httpService: HttpService,
     private readonly currencyRepository: CurrencyRepository,
@@ -16,7 +17,8 @@ export class BankService {
   ) {
     this.bankConfig = this.configService.get<BankConfig>('bank');
   }
-  public async getAndSave(): Promise<any> {
+
+  public async getAndSave(): Promise<void> {
     const axiosResponse = await this.httpService.axiosRef.get(this.bankConfig.bankURL);
     const currencies = CurrencyMapper.toResponseDto(axiosResponse);
 
@@ -24,6 +26,7 @@ export class BankService {
       const entity = await this.currencyRepository.findOneBy({
         ccy: currency.ccy,
       });
+
       if (!entity) {
         await this.currencyRepository.save(currency);
       } else {

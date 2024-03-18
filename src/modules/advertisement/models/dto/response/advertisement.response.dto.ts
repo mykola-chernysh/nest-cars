@@ -4,6 +4,7 @@ export class AdvertisementResponseDto {
   id?: string;
   brand: string;
   model: string;
+  year: string;
   color: string;
   price: string;
   currency: string;

@@ -36,11 +36,13 @@ export class AdvertisementService {
 
   public async createAd(dto: CreateAdvertisementRequestDto, userData: IUserData): Promise<AdvertisementResponseDto> {
     const priceToString = dto.price.toString();
+    const yearToString = dto.year.toString();
 
     const adEntity = await this.advertisementRepository.save(
       this.advertisementRepository.create({
         ...dto,
         price: priceToString,
+        year: yearToString,
         user_id: userData.userId,
       }),
     );
@@ -70,7 +72,14 @@ export class AdvertisementService {
   ): Promise<AdvertisementResponseDto> {
     const adEntity = await this.findByIdOrThrow(adId, userData.userId);
     const priceToString = dto.price.toString();
-    const newAd = await this.advertisementRepository.save({ ...adEntity, ...dto, price: priceToString });
+    const yearToString = dto.year.toString();
+
+    const newAd = await this.advertisementRepository.save({
+      ...adEntity,
+      ...dto,
+      price: priceToString,
+      year: yearToString,
+    });
 
     return AdvertisementMapper.toResponseDto(newAd);
   }

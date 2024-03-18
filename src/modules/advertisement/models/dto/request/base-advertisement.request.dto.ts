@@ -15,6 +15,11 @@ export class BaseAdvertisementRequestDto {
   @Type(() => String)
   model: string;
 
+  @IsInt()
+  @Min(1980)
+  @Max(new Date().getFullYear())
+  year: number;
+
   @IsString()
   @Length(2, 10)
   color: string;

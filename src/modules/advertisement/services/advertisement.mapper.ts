@@ -5,18 +5,19 @@ import { AdvertisementResponseDto } from '../models/dto/response/advertisement.r
 import { AdvertisementListResponseDto } from '../models/dto/response/advertisement-list.response.dto';
 
 export class AdvertisementMapper {
-  public static toResponseDto(carEntity: AdvertisementEntity): AdvertisementResponseDto {
+  public static toResponseDto(advertisementEntity: AdvertisementEntity): AdvertisementResponseDto {
     return {
-      id: carEntity.id,
-      brand: carEntity.brand,
-      model: carEntity.model,
-      color: carEntity.color,
-      price: carEntity.price,
-      currency: carEntity.currency,
-      image: carEntity.image,
-      created: carEntity.created,
-      updated: carEntity.updated,
-      user: carEntity.user ? UserMapper.toResponseDto(carEntity.user) : null,
+      id: advertisementEntity.id,
+      brand: advertisementEntity.brand,
+      model: advertisementEntity.model,
+      year: advertisementEntity.year,
+      color: advertisementEntity.color,
+      price: advertisementEntity.price,
+      currency: advertisementEntity.currency,
+      image: advertisementEntity.image,
+      created: advertisementEntity.created,
+      updated: advertisementEntity.updated,
+      user: advertisementEntity.user ? UserMapper.toResponseDto(advertisementEntity.user) : null,
     };
   }
 

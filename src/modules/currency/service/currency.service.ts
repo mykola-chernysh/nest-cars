@@ -7,8 +7,8 @@ import { BankService } from './bank.service';
 export class CurrencyService {
   constructor(private readonly bankService: BankService) {}
 
-  @Cron(CronExpression.EVERY_5_SECONDS)
-  async handleCron(): Promise<any> {
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async handleCron(): Promise<void> {
     await this.bankService.getAndSave();
   }
 }
