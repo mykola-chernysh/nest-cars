@@ -10,6 +10,7 @@ import { SwaggerHelper } from './common/helpers/swagger.helper';
 import { AppConfig, Config } from './configs/config.type';
 import { AppModule } from './modules/app.module';
 import { AuthService } from './modules/auth/services/auth.service';
+import { BankService } from './modules/currency/service/bank.service';
 import { BaseUserRequestDto } from './modules/user/models/dto/request/base-user.request.dto';
 
 async function bootstrap() {
@@ -71,5 +72,8 @@ async function bootstrap() {
     Logger.log(`Server running ${url}`);
     Logger.log(`Swagger running ${url}/api`);
   });
+
+  const appCreateBankRequest = app.get(BankService);
+  await appCreateBankRequest.getAndSave();
 }
 void bootstrap();

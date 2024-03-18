@@ -6,12 +6,12 @@ import { ERole } from '../../common/enums/role.enum';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { IUserData } from '../auth/models/interfaces/user-data.interface';
-import { AdvertisementListRequestDto } from './modules/dto/request/advertisement-list.request.dto';
-import { CreateAdvertisementRequestDto } from './modules/dto/request/create-advertisement.request.dto';
-import { UpdateAdvertisementRequestDto } from './modules/dto/request/update-advertisement.request.dto';
-import { AdvertisementResponseDto } from './modules/dto/response/advertisement.response.dto';
-import { AdvertisementListResponseDto } from './modules/dto/response/advertisement-list.response.dto';
-import { AdvertisementService } from './service/advertisement.service';
+import { AdvertisementListRequestDto } from './models/dto/request/advertisement-list.request.dto';
+import { CreateAdvertisementRequestDto } from './models/dto/request/create-advertisement.request.dto';
+import { UpdateAdvertisementRequestDto } from './models/dto/request/update-advertisement.request.dto';
+import { AdvertisementResponseDto } from './models/dto/response/advertisement.response.dto';
+import { AdvertisementListResponseDto } from './models/dto/response/advertisement-list.response.dto';
+import { AdvertisementService } from './services/advertisement.service';
 
 @ApiTags('Advertisement')
 @Controller('advertisements')

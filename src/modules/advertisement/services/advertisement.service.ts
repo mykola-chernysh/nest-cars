@@ -1,15 +1,15 @@
 import { ForbiddenException, Injectable, UnprocessableEntityException } from '@nestjs/common';
 
 import { ERole } from '../../../common/enums/role.enum';
-import { CarEntity } from '../../../database/entities/car.entity';
+import { AdvertisementEntity } from '../../../database/entities/advertisement.entity';
 import { IUserData } from '../../auth/models/interfaces/user-data.interface';
 import { AdvertisementRepository } from '../../repository/services/advertisement.repository';
 import { UserRepository } from '../../repository/services/user.repository';
-import { AdvertisementListRequestDto } from '../modules/dto/request/advertisement-list.request.dto';
-import { CreateAdvertisementRequestDto } from '../modules/dto/request/create-advertisement.request.dto';
-import { UpdateAdvertisementRequestDto } from '../modules/dto/request/update-advertisement.request.dto';
-import { AdvertisementResponseDto } from '../modules/dto/response/advertisement.response.dto';
-import { AdvertisementListResponseDto } from '../modules/dto/response/advertisement-list.response.dto';
+import { AdvertisementListRequestDto } from '../models/dto/request/advertisement-list.request.dto';
+import { CreateAdvertisementRequestDto } from '../models/dto/request/create-advertisement.request.dto';
+import { UpdateAdvertisementRequestDto } from '../models/dto/request/update-advertisement.request.dto';
+import { AdvertisementResponseDto } from '../models/dto/response/advertisement.response.dto';
+import { AdvertisementListResponseDto } from '../models/dto/response/advertisement-list.response.dto';
 import { AdvertisementMapper } from './advertisement.mapper';
 
 @Injectable()
@@ -81,7 +81,7 @@ export class AdvertisementService {
     await this.advertisementRepository.remove(adEntity);
   }
 
-  private async findByIdOrThrow(myAdId: string, userId: string): Promise<CarEntity> {
+  private async findByIdOrThrow(myAdId: string, userId: string): Promise<AdvertisementEntity> {
     const adEntity = await this.advertisementRepository.findOneBy({ id: myAdId });
     const userEntity = await this.userRepository.findOneBy({ id: userId });
 

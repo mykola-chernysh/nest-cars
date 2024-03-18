@@ -1,10 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
+import { ECurrency } from '../../common/enums/currency.enum';
 import { BaseEntity } from './models/base.entity';
 import { UserEntity } from './user.entity';
 
-@Entity('cars')
-export class CarEntity extends BaseEntity {
+@Entity('advertisement')
+export class AdvertisementEntity extends BaseEntity {
   @Column('text')
   brand: string;
 
@@ -12,14 +13,22 @@ export class CarEntity extends BaseEntity {
   model: string;
 
   @Column('text')
+  year: string;
+
+  @Column('text')
   color: string;
 
   @Column('text')
   price: string;
 
-  @Column('text')
+  @Column({
+    type: 'enum',
+    enum: ECurrency,
+    default: ECurrency.UAH,
+  })
   currency: string;
 
+  @Column('text')
   @Column('text', { nullable: true })
   image?: string;
 

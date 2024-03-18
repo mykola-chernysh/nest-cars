@@ -23,4 +23,7 @@ export default (): Config => ({
     refreshTokenSecret: process.env.AUTH_REFRESH_TOKEN_SECRET || 'refresh secret',
     refreshTokenExpiration: parseInt(process.env.AUTH_REFRESH_TOKEN_EXPIRATION) || 86400,
   },
+  bank: {
+    bankURL: process.env.BANK_URL,
+  },
 });

@@ -1,11 +1,11 @@
-import { CarEntity } from '../../../database/entities/car.entity';
+import { AdvertisementEntity } from '../../../database/entities/advertisement.entity';
 import { UserMapper } from '../../user/services/user.mapper';
-import { AdvertisementListRequestDto } from '../modules/dto/request/advertisement-list.request.dto';
-import { AdvertisementResponseDto } from '../modules/dto/response/advertisement.response.dto';
-import { AdvertisementListResponseDto } from '../modules/dto/response/advertisement-list.response.dto';
+import { AdvertisementListRequestDto } from '../models/dto/request/advertisement-list.request.dto';
+import { AdvertisementResponseDto } from '../models/dto/response/advertisement.response.dto';
+import { AdvertisementListResponseDto } from '../models/dto/response/advertisement-list.response.dto';
 
 export class AdvertisementMapper {
-  public static toResponseDto(carEntity: CarEntity): AdvertisementResponseDto {
+  public static toResponseDto(carEntity: AdvertisementEntity): AdvertisementResponseDto {
     return {
       id: carEntity.id,
       brand: carEntity.brand,
@@ -21,7 +21,7 @@ export class AdvertisementMapper {
   }
 
   public static toListResponseDto(
-    entities: CarEntity[],
+    entities: AdvertisementEntity[],
     total: number,
     query: AdvertisementListRequestDto,
   ): AdvertisementListResponseDto {

@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
-import { CarEntity } from '../../../database/entities/car.entity';
-import { AdvertisementListRequestDto } from '../../advertisement/modules/dto/request/advertisement-list.request.dto';
+import { AdvertisementEntity } from '../../../database/entities/advertisement.entity';
+import { AdvertisementListRequestDto } from '../../advertisement/models/dto/request/advertisement-list.request.dto';
 import { IUserData } from '../../auth/models/interfaces/user-data.interface';
 
 @Injectable()
-export class AdvertisementRepository extends Repository<CarEntity> {
+export class AdvertisementRepository extends Repository<AdvertisementEntity> {
   constructor(private readonly dataSource: DataSource) {
-    super(CarEntity, dataSource.manager);
+    super(AdvertisementEntity, dataSource.manager);
   }
 
-  public async getAll(query: AdvertisementListRequestDto): Promise<[CarEntity[], number]> {
+  public async getAll(query: AdvertisementListRequestDto): Promise<[AdvertisementEntity[], number]> {
     const qb = this.createQueryBuilder('advertisement');
     qb.leftJoinAndSelect('advertisement.user', 'user');
 
@@ -22,7 +22,10 @@ export class AdvertisementRepository extends Repository<CarEntity> {
     return await qb.getManyAndCount();
   }
 
-  public async getMyAllAd(query: AdvertisementListRequestDto, userData: IUserData): Promise<[CarEntity[], number]> {
+  public async getMyAllAd(
+    query: AdvertisementListRequestDto,
+    userData: IUserData,
+  ): Promise<[AdvertisementEntity[], number]> {
     const qb = this.createQueryBuilder('advertisement');
     qb.leftJoinAndSelect('advertisement.user', 'user');
 
@@ -36,7 +39,7 @@ export class AdvertisementRepository extends Repository<CarEntity> {
     return await qb.getManyAndCount();
   }
 
-  public async getMyAd(myAdId: string, userData: IUserData): Promise<CarEntity> {
+  public async getMyAd(myAdId: string, userData: IUserData): Promise<AdvertisementEntity> {
     const qb = this.createQueryBuilder('advertisement');
     qb.leftJoinAndSelect('advertisement.user', 'user');
 
