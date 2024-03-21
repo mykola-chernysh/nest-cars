@@ -21,6 +21,25 @@ export class AdvertisementMapper {
     };
   }
 
+  public static toGetOneResponseDto(advertisementEntity: AdvertisementEntity): AdvertisementResponseDto {
+    return {
+      id: advertisementEntity.id,
+      brand: advertisementEntity.brand,
+      model: advertisementEntity.model,
+      year: advertisementEntity.year,
+      color: advertisementEntity.color,
+      price: advertisementEntity.price,
+      currency: advertisementEntity.currency,
+      UAH: advertisementEntity.UAH,
+      USD: advertisementEntity.USD,
+      EUR: advertisementEntity.EUR,
+      image: advertisementEntity.image,
+      created: advertisementEntity.created,
+      updated: advertisementEntity.updated,
+      user: advertisementEntity.user ? UserMapper.toResponseDto(advertisementEntity.user) : null,
+    };
+  }
+
   public static toListResponseDto(
     entities: AdvertisementEntity[],
     total: number,

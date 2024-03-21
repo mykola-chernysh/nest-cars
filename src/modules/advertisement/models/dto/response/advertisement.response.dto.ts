@@ -8,6 +8,9 @@ export class AdvertisementResponseDto {
   color: string;
   price: string;
   currency: string;
+  UAH?: string;
+  USD?: string;
+  EUR?: string;
   image?: string;
   created: Date;
   updated: Date;

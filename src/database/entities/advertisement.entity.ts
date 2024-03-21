@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { ECurrency } from '../../common/enums/currency.enum';
+import { IConverter } from '../../modules/advertisement/models/interface/currency-converter.interface';
 import { BaseEntity } from './models/base.entity';
 import { UserEntity } from './user.entity';
 
@@ -28,7 +29,15 @@ export class AdvertisementEntity extends BaseEntity {
   })
   currency: string;
 
-  @Column('text')
+  @Column('text', { nullable: true })
+  UAH?: string;
+
+  @Column('text', { nullable: true })
+  USD?: string;
+
+  @Column('text', { nullable: true })
+  EUR?: string;
+
   @Column('text', { nullable: true })
   image?: string;
 

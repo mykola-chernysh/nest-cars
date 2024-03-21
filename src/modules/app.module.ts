@@ -7,6 +7,8 @@ import { RolesGuard } from '../common/guards/roles.guards';
 import configuration from '../configs/configs';
 import { AdvertisementModule } from './advertisement/advertisement.module';
 import { AuthModule } from './auth/auth.module';
+import { CarBrandModule } from './car-brand/car-brand.module';
+import { CarModelModule } from './car-model/car-model.module';
 import { CurrencyModule } from './currency/currency.module';
 import { HealthModule } from './health/health.module';
 import { PostgresModule } from './postgres/postgres.module';
@@ -27,6 +29,8 @@ import { UserModule } from './user/user.module';
     AuthModule,
     UserModule,
     AdvertisementModule,
+    CarBrandModule,
+    CarModelModule,
     HealthModule,
     RepositoryModule,
   ],
