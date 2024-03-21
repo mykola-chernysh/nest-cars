@@ -1,26 +1,30 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { ECurrency } from '../../common/enums/currency.enum';
-import { IConverter } from '../../modules/advertisement/models/interface/currency-converter.interface';
+import { EAdStatus } from '../../modules/advertisement/models/enums/ads-status.enum';
+import { ERegion } from '../../modules/advertisement/models/enums/region.enum';
 import { BaseEntity } from './models/base.entity';
 import { UserEntity } from './user.entity';
 
 @Entity('advertisement')
 export class AdvertisementEntity extends BaseEntity {
-  @Column('text')
+  @Column({ type: 'text' })
+  title: string;
+
+  @Column({ type: 'text' })
   brand: string;
 
-  @Column('text')
+  @Column({ type: 'text' })
   model: string;
 
-  @Column('text')
-  year: string;
+  @Column({ type: 'int' })
+  year: number;
 
-  @Column('text')
+  @Column({ type: 'text' })
   color: string;
 
-  @Column('text')
-  price: string;
+  @Column({ type: 'int' })
+  price: number;
 
   @Column({
     type: 'enum',
@@ -29,17 +33,24 @@ export class AdvertisementEntity extends BaseEntity {
   })
   currency: string;
 
-  @Column('text', { nullable: true })
-  UAH?: string;
+  @Column({
+    type: 'enum',
+    enum: ERegion,
+  })
+  region: string;
 
-  @Column('text', { nullable: true })
-  USD?: string;
+  @Column({ type: 'text' })
+  description: string;
 
-  @Column('text', { nullable: true })
-  EUR?: string;
-
-  @Column('text', { nullable: true })
+  @Column({ type: 'text', nullable: true })
   image?: string;
+
+  @Column({
+    type: 'enum',
+    enum: EAdStatus,
+    default: EAdStatus.NOT_ACTIVE,
+  })
+  status: string;
 
   @Column()
   user_id: string;

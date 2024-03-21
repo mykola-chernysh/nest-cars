@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsOptional, IsString, Length, Matches } from 'class-validator';
+import { IsBoolean, IsOptional, IsString, Length, Matches } from 'class-validator';
 
 import { EAccount } from '../../../../../common/enums/account.enum';
 import { ERole } from '../../../../../common/enums/role.enum';
@@ -31,6 +31,7 @@ export class BaseUserRequestDto {
   // @Matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%_*#?&])[A-Za-z\d@$_!%*#?&]{8,}$/)
   password: string;
 
+  @IsOptional()
   @ApiProperty({ enum: ERole, default: ERole.BUYER })
   @IsString()
   role?: ERole;
@@ -39,6 +40,10 @@ export class BaseUserRequestDto {
   @ApiProperty({ enum: EAccount, default: EAccount.BASE })
   @IsString()
   account?: EAccount;
+
+  @IsOptional()
+  @IsBoolean()
+  blocked?: boolean;
 
   @IsOptional()
   @IsString()

@@ -36,23 +36,22 @@ export class AdvertisementService {
 
     const convertedCurrency = await this.currencyConverter(+adEntity.price, adEntity.currency);
 
-    return AdvertisementMapper.toGetOneResponseDto({
-      ...adEntity,
-      UAH: convertedCurrency.UAH,
-      USD: convertedCurrency.USD,
-      EUR: convertedCurrency.EUR,
-    });
+    return AdvertisementMapper.toGetOneResponseDto(
+      {
+        ...adEntity,
+      },
+      {
+        UAH: convertedCurrency.UAH,
+        USD: convertedCurrency.USD,
+        EUR: convertedCurrency.EUR,
+      },
+    );
   }
 
   public async createAd(dto: CreateAdvertisementRequestDto, userData: IUserData): Promise<AdvertisementResponseDto> {
-    const priceToString = dto.price.toString();
-    const yearToString = dto.year.toString();
-
     const adEntity = await this.advertisementRepository.save(
       this.advertisementRepository.create({
         ...dto,
-        price: priceToString,
-        year: yearToString,
         user_id: userData.userId,
       }),
     );
@@ -65,12 +64,16 @@ export class AdvertisementService {
 
     const convertedCurrency = await this.currencyConverter(+adEntity.price, adEntity.currency);
 
-    return AdvertisementMapper.toResponseDto({
-      ...adEntity,
-      UAH: convertedCurrency.UAH,
-      USD: convertedCurrency.USD,
-      EUR: convertedCurrency.EUR,
-    });
+    return AdvertisementMapper.toGetOneResponseDto(
+      {
+        ...adEntity,
+      },
+      {
+        UAH: convertedCurrency.UAH,
+        USD: convertedCurrency.USD,
+        EUR: convertedCurrency.EUR,
+      },
+    );
   }
 
   public async getMyAllAd(
@@ -88,17 +91,13 @@ export class AdvertisementService {
     dto: UpdateAdvertisementRequestDto,
   ): Promise<AdvertisementResponseDto> {
     const adEntity = await this.findByIdOrThrow(adId, userData.userId);
-    const priceToString = dto.price.toString();
-    const yearToString = dto.year.toString();
 
-    const newAd = await this.advertisementRepository.save({
+    const newAdEntity = await this.advertisementRepository.save({
       ...adEntity,
       ...dto,
-      price: priceToString,
-      year: yearToString,
     });
 
-    return AdvertisementMapper.toResponseDto(newAd);
+    return AdvertisementMapper.toResponseDto(newAdEntity);
   }
 
   public async deleteAd(adId: string, userData: IUserData): Promise<void> {
@@ -153,9 +152,9 @@ export class AdvertisementService {
     }
 
     return {
-      UAH: uah.toString(),
-      USD: usd.toString(),
-      EUR: eur.toString(),
+      UAH: uah,
+      USD: usd,
+      EUR: eur,
     };
   }
 }

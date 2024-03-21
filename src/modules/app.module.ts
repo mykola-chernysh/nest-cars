@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 
-import { RolesGuard } from '../common/guards/roles.guards';
+import { RolesGuard } from '../common/guards/roles.guard';
 import configuration from '../configs/configs';
 import { AdvertisementModule } from './advertisement/advertisement.module';
 import { AuthModule } from './auth/auth.module';

@@ -5,7 +5,7 @@ import { BaseEntity } from './models/base.entity';
 
 @Entity('car-model')
 export class CarModelEntity extends BaseEntity {
-  @Column('text')
+  @Column({ type: 'text' })
   model: string;
 
   @Column()

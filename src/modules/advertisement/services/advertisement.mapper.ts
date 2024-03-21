@@ -3,37 +3,49 @@ import { UserMapper } from '../../user/services/user.mapper';
 import { AdvertisementListRequestDto } from '../models/dto/request/advertisement-list.request.dto';
 import { AdvertisementResponseDto } from '../models/dto/response/advertisement.response.dto';
 import { AdvertisementListResponseDto } from '../models/dto/response/advertisement-list.response.dto';
+import { IConverter } from '../models/interface/currency-converter.interface';
 
 export class AdvertisementMapper {
   public static toResponseDto(advertisementEntity: AdvertisementEntity): AdvertisementResponseDto {
     return {
       id: advertisementEntity.id,
+      title: advertisementEntity.title,
       brand: advertisementEntity.brand,
       model: advertisementEntity.model,
       year: advertisementEntity.year,
       color: advertisementEntity.color,
       price: advertisementEntity.price,
       currency: advertisementEntity.currency,
+      region: advertisementEntity.region,
+      description: advertisementEntity.description,
       image: advertisementEntity.image,
+      status: advertisementEntity.status,
       created: advertisementEntity.created,
       updated: advertisementEntity.updated,
       user: advertisementEntity.user ? UserMapper.toResponseDto(advertisementEntity.user) : null,
     };
   }
 
-  public static toGetOneResponseDto(advertisementEntity: AdvertisementEntity): AdvertisementResponseDto {
+  public static toGetOneResponseDto(
+    advertisementEntity: AdvertisementEntity,
+    converter: IConverter,
+  ): AdvertisementResponseDto {
     return {
       id: advertisementEntity.id,
+      title: advertisementEntity.title,
       brand: advertisementEntity.brand,
       model: advertisementEntity.model,
       year: advertisementEntity.year,
       color: advertisementEntity.color,
       price: advertisementEntity.price,
       currency: advertisementEntity.currency,
-      UAH: advertisementEntity.UAH,
-      USD: advertisementEntity.USD,
-      EUR: advertisementEntity.EUR,
+      UAH: converter.UAH,
+      USD: converter.USD,
+      EUR: converter.EUR,
+      region: advertisementEntity.region,
+      description: advertisementEntity.description,
       image: advertisementEntity.image,
+      status: advertisementEntity.status,
       created: advertisementEntity.created,
       updated: advertisementEntity.updated,
       user: advertisementEntity.user ? UserMapper.toResponseDto(advertisementEntity.user) : null,

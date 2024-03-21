@@ -5,13 +5,20 @@ import { TransformHelper } from '../../../../../common/helpers/transform.helper'
 
 export class BaseAdvertisementRequestDto {
   @IsString()
-  @Length(3, 30)
+  @Length(0, 1500)
   @Transform(TransformHelper.trim)
+  title: string;
+
+  @IsString()
+  @Length(1, 30)
+  @Transform(TransformHelper.trim)
+  @Transform(TransformHelper.toLowerCase)
   brand: string;
 
   @IsString()
   @Length(1, 30)
   @Transform(TransformHelper.trim)
+  @Transform(TransformHelper.toLowerCase)
   @Type(() => String)
   model: string;
 
@@ -26,15 +33,28 @@ export class BaseAdvertisementRequestDto {
 
   @IsInt()
   @Min(0)
-  @Max(99999999)
+  @Max(999999999999)
   price: number;
 
   @IsString()
   @Length(1, 10)
   currency: string;
 
+  @IsString()
+  @Length(0, 50)
+  region: string;
+
+  @IsString()
+  @Length(0, 10000)
+  description: string;
+
   @IsOptional()
   @IsString()
   @Length(0, 3000)
   image?: string;
+
+  @IsOptional()
+  @IsString()
+  @Length(0, 3000)
+  status?: string;
 }

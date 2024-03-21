@@ -4,15 +4,15 @@ import { BaseEntity } from './models/base.entity';
 
 @Entity('currency')
 export class CurrencyEntity extends BaseEntity {
-  @Column('text')
+  @Column({ type: 'text' })
   ccy: string;
 
-  @Column('text')
+  @Column({ type: 'text' })
   base_ccy: string;
 
-  @Column('text')
+  @Column({ type: 'text' })
   buy: string;
 
-  @Column('text')
+  @Column({ type: 'text' })
   sale: string;
 }

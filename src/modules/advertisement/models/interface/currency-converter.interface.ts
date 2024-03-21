@@ -1,5 +1,5 @@
 export interface IConverter {
-  UAH: string;
-  USD: string;
-  EUR: string;
+  UAH: number;
+  USD: number;
+  EUR: number;
 }

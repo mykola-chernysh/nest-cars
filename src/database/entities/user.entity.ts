@@ -8,16 +8,16 @@ import { RefreshTokenEntity } from './refresh-token.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
-  @Column('text')
+  @Column({ type: 'text' })
   firstName: string;
 
-  @Column('text')
+  @Column({ type: 'text' })
   lastName: string;
 
-  @Column('text', { unique: true })
+  @Column({ type: 'text', unique: true })
   email: string;
 
-  @Column('text', { select: false })
+  @Column({ type: 'text', select: false })
   password: string;
 
   @Column({
@@ -34,7 +34,10 @@ export class UserEntity extends BaseEntity {
   })
   account?: EAccount;
 
-  @Column('text', { nullable: true })
+  @Column({ type: 'boolean', default: false })
+  blocked: boolean;
+
+  @Column({ type: 'text', nullable: true })
   image?: string;
 
   @OneToMany(() => RefreshTokenEntity, (entity) => entity.user)

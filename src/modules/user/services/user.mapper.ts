@@ -13,6 +13,7 @@ export class UserMapper {
       email: userEntity.email,
       role: userEntity.role,
       account: userEntity.account,
+      blocked: userEntity.blocked,
       image: userEntity.image,
     };
   }
