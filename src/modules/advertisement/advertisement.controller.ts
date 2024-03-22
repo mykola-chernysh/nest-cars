@@ -3,7 +3,9 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { Roles } from '../../common/decorators/role.decorator';
 import { ERole } from '../../common/enums/role.enum';
+import { BadWordsGuard } from '../../common/guards/bad-words.guard';
 import { BrandAndModelGuard } from '../../common/guards/brandAndModel.guard';
+import { TypeAccountGuard } from '../../common/guards/type-account.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { IUserData } from '../auth/models/interfaces/user-data.interface';
@@ -37,7 +39,7 @@ export class AdvertisementController {
   @ApiOperation({ summary: 'Creating an advertisements' })
   @Post('create-advert')
   @Roles(ERole.SELLER, ERole.MANAGER, ERole.ADMIN)
-  @UseGuards(BrandAndModelGuard)
+  @UseGuards(BrandAndModelGuard, TypeAccountGuard, BadWordsGuard)
   public async createAd(
     @Body() dto: CreateAdvertisementRequestDto,
     @CurrentUser() userData: IUserData,

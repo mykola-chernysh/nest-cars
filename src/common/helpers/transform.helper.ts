@@ -6,4 +6,8 @@ export class TransformHelper {
   public static toLowerCase({ value }) {
     return value ? value.toLowerCase() : value;
   }
+
+  public static toUpperCase({ value }) {
+    return value ? value.toUpperCase() : value;
+  }
 }

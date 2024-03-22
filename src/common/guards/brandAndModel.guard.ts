@@ -10,7 +10,7 @@ export class BrandAndModelGuard implements CanActivate {
     private carModelRepository: CarModelRepository,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  public async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
     const brand = request.body.brand.toLowerCase();

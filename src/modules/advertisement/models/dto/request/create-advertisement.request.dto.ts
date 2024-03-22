@@ -13,5 +13,4 @@ export class CreateAdvertisementRequestDto extends PickType(BaseAdvertisementReq
   'region',
   'description',
   'image',
-  'status',
 ]) {}

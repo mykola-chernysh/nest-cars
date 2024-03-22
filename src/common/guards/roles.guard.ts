@@ -17,7 +17,7 @@ export class RolesGuard implements CanActivate {
     private userRepository: UserRepository,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  public async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this.reflector.getAllAndOverride<ERole[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),

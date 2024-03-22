@@ -38,6 +38,9 @@ export class BaseAdvertisementRequestDto {
 
   @IsString()
   @Length(1, 10)
+  @Transform(TransformHelper.trim)
+  @Transform(TransformHelper.toUpperCase)
+  @Type(() => String)
   currency: string;
 
   @IsString()

@@ -11,6 +11,7 @@ import { CreateAdvertisementRequestDto } from '../models/dto/request/create-adve
 import { UpdateAdvertisementRequestDto } from '../models/dto/request/update-advertisement.request.dto';
 import { AdvertisementResponseDto } from '../models/dto/response/advertisement.response.dto';
 import { AdvertisementListResponseDto } from '../models/dto/response/advertisement-list.response.dto';
+import { EAdStatus } from '../models/enums/ads-status.enum';
 import { IConverter } from '../models/interface/currency-converter.interface';
 import { AdvertisementMapper } from './advertisement.mapper';
 
@@ -53,6 +54,7 @@ export class AdvertisementService {
       this.advertisementRepository.create({
         ...dto,
         user_id: userData.userId,
+        status: EAdStatus.ACTIVE,
       }),
     );
 
