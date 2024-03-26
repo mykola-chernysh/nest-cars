@@ -29,7 +29,7 @@ export class AdvertisementRepository extends Repository<AdvertisementEntity> {
     const qb = this.createQueryBuilder('advertisement');
     qb.leftJoinAndSelect('advertisement.user', 'user');
 
-    qb.andWhere('user_id = :myId');
+    qb.andWhere('advertisement.user_id = :myId');
     qb.setParameter('myId', userData.userId);
 
     qb.addOrderBy('advertisement.created', 'DESC');
@@ -44,8 +44,7 @@ export class AdvertisementRepository extends Repository<AdvertisementEntity> {
     qb.leftJoinAndSelect('advertisement.user', 'user');
 
     qb.where('advertisement.id = :myAdId', { myAdId });
-    qb.andWhere('user_id = :myId');
-    qb.setParameter('myId', userData.userId);
+    qb.andWhere('advertisement.user_id = :myId', { myId: userData.userId });
 
     return await qb.getOne();
   }

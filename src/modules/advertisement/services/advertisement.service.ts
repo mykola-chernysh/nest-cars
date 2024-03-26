@@ -1,4 +1,10 @@
-import { BadGatewayException, ForbiddenException, Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 
 import { ERole } from '../../../common/enums/role.enum';
 import { AdvertisementEntity } from '../../../database/entities/advertisement.entity';
@@ -6,6 +12,7 @@ import { IUserData } from '../../auth/models/interfaces/user-data.interface';
 import { AdvertisementRepository } from '../../repository/services/advertisement.repository';
 import { CurrencyRepository } from '../../repository/services/currency.repository';
 import { UserRepository } from '../../repository/services/user.repository';
+import { ViewRepository } from '../../repository/services/view.repository';
 import { AdvertisementListRequestDto } from '../models/dto/request/advertisement-list.request.dto';
 import { CreateAdvertisementRequestDto } from '../models/dto/request/create-advertisement.request.dto';
 import { UpdateAdvertisementRequestDto } from '../models/dto/request/update-advertisement.request.dto';
@@ -19,8 +26,9 @@ import { AdvertisementMapper } from './advertisement.mapper';
 export class AdvertisementService {
   constructor(
     private readonly advertisementRepository: AdvertisementRepository,
-    private readonly userRepository: UserRepository,
     private readonly currencyRepository: CurrencyRepository,
+    private readonly userRepository: UserRepository,
+    private readonly viewRepository: ViewRepository,
   ) {}
 
   public async getAll(query: AdvertisementListRequestDto): Promise<AdvertisementListResponseDto> {
@@ -36,6 +44,12 @@ export class AdvertisementService {
     });
 
     const convertedCurrency = await this.currencyConverter(+adEntity.price, adEntity.currency);
+
+    await this.viewRepository.save(
+      this.viewRepository.create({
+        advertisement_id: adId,
+      }),
+    );
 
     return AdvertisementMapper.toGetOneResponseDto(
       {
@@ -64,9 +78,17 @@ export class AdvertisementService {
   public async getMyAd(myAdId: string, userDada: IUserData): Promise<AdvertisementResponseDto> {
     const adEntity = await this.advertisementRepository.getMyAd(myAdId, userDada);
 
+    if (!adEntity) {
+      throw new BadRequestException('Advertisement not found');
+    }
+
     const convertedCurrency = await this.currencyConverter(+adEntity.price, adEntity.currency);
 
-    return AdvertisementMapper.toGetOneResponseDto(
+    const viewsPerDay = await this.viewRepository.getViewsPerDay(myAdId);
+    const viewsPerWeek = await this.viewRepository.getViewsPerWeek(myAdId);
+    const viewsPerMonth = await this.viewRepository.getViewsPerMonth(myAdId);
+
+    return AdvertisementMapper.toGetOnePremiumResponseDto(
       {
         ...adEntity,
       },
@@ -74,6 +96,11 @@ export class AdvertisementService {
         UAH: convertedCurrency.UAH,
         USD: convertedCurrency.USD,
         EUR: convertedCurrency.EUR,
+      },
+      {
+        viewsPerDay,
+        viewsPerWeek,
+        viewsPerMonth,
       },
     );
   }

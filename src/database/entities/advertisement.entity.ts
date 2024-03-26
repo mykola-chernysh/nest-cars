@@ -1,10 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { ECurrency } from '../../common/enums/currency.enum';
 import { EAdStatus } from '../../modules/advertisement/models/enums/ads-status.enum';
 import { ERegion } from '../../modules/advertisement/models/enums/region.enum';
 import { BaseEntity } from './models/base.entity';
 import { UserEntity } from './user.entity';
+import { ViewEntity } from './view.entity';
 
 @Entity('advertisement')
 export class AdvertisementEntity extends BaseEntity {
@@ -57,4 +58,7 @@ export class AdvertisementEntity extends BaseEntity {
   @ManyToOne(() => UserEntity, (entity) => entity.cars)
   @JoinColumn({ name: 'user_id' })
   user?: UserEntity;
+
+  @OneToMany(() => ViewEntity, (entity) => entity.advertisement)
+  views?: ViewEntity[];
 }

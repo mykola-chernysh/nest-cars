@@ -4,7 +4,7 @@ import { AdvertisementRepository } from '../../modules/repository/services/adver
 import { UserRepository } from '../../modules/repository/services/user.repository';
 
 @Injectable()
-export class TypeAccountGuard implements CanActivate {
+export class LimitAccountGuard implements CanActivate {
   constructor(
     private readonly advertisementRepository: AdvertisementRepository,
     private readonly userRepository: UserRepository,

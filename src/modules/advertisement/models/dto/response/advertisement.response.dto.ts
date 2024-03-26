@@ -12,6 +12,9 @@ export class AdvertisementResponseDto {
   UAH?: number;
   USD?: number;
   EUR?: number;
+  viewsPerDay?: number;
+  viewsPerWeek?: number;
+  viewsPerMonth?: number;
   region: string;
   description: string;
   image?: string;
