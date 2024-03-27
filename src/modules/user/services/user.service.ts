@@ -1,8 +1,11 @@
 import { ConflictException, Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Express } from 'express';
 
 import { IUserData } from '../../auth/models/interfaces/user-data.interface';
 import { AuthCacheService } from '../../auth/services/auth-cache.service';
 import { TokenService } from '../../auth/services/token.service';
+import { EFileType } from '../../aws/models/enums/file-type.enum';
+import { AwsService } from '../../aws/services/aws.service';
 import { RefreshTokenRepository } from '../../repository/services/refresh-token.repository';
 import { UserRepository } from '../../repository/services/user.repository';
 import { UpdateUserRequestDto } from '../models/dto/request/update-user.request.dto';
@@ -20,6 +23,7 @@ export class UserService {
     private readonly refreshTokenRepository: RefreshTokenRepository,
     private readonly authCacheService: AuthCacheService,
     private readonly tokenService: TokenService,
+    private readonly awsService: AwsService,
   ) {}
   public async findMe(userData: IUserData): Promise<UserResponseDto> {
     const userEntity = await this.userRepository.findOneBy({ id: userData.userId });
@@ -30,6 +34,15 @@ export class UserService {
   public async updateMe(userData: IUserData, dto: UpdateUserRequestDto): Promise<UserResponseDto> {
     const userEntity = await this.userRepository.findOneBy({ id: userData.userId });
     await this.userRepository.save({ ...userEntity, ...dto });
+
+    return UserMapper.toResponseDto(userEntity);
+  }
+
+  public async uploadAvatar(file: Express.Multer.File, userData: IUserData): Promise<UserResponseDto> {
+    const userEntity = await this.userRepository.findOneBy({ id: userData.userId });
+    const pathFile = await this.awsService.uploadFile(file, userData.userId, EFileType.USER);
+
+    await this.userRepository.save({ ...userEntity, image: pathFile });
 
     return UserMapper.toResponseDto(userEntity);
   }

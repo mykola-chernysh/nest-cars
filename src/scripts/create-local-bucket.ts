@@ -1,7 +1,8 @@
+import * as process from 'node:process';
+
 import { BucketCannedACL, CreateBucketCommand, S3Client } from '@aws-sdk/client-s3';
 import { Logger } from '@nestjs/common';
 import * as dotenv from 'dotenv';
-import * as process from 'process';
 
 dotenv.config({ path: 'environments/local.env' });
 
