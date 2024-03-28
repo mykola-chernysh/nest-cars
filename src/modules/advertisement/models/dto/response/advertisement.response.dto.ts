@@ -1,4 +1,5 @@
 import { UserResponseDto } from '../../../../user/models/dto/response/user.response.dto';
+import { ImageResponseDto } from './image.response.dto';
 
 export class AdvertisementResponseDto {
   id?: string;
@@ -22,4 +23,5 @@ export class AdvertisementResponseDto {
   created: Date;
   updated: Date;
   user?: UserResponseDto;
+  images?: ImageResponseDto[];
 }

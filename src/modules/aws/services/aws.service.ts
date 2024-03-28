@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 
-import { ObjectCannedACL, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, ObjectCannedACL, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { S3ClientConfig } from '@aws-sdk/client-s3/dist-types/S3Client';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -34,12 +34,12 @@ export class AwsService {
     this.client = new S3Client(configuration);
   }
 
-  async uploadFile(file: Express.Multer.File, itemId: string, itemType: EFileType): Promise<string> {
-    const pathFile = this.buildPath(file.originalname, itemId, itemType);
+  public async uploadFile(file: Express.Multer.File, itemId: string, itemType: EFileType): Promise<string> {
+    const filePath = this.buildPath(file.originalname, itemId, itemType);
 
     await this.client.send(
       new PutObjectCommand({
-        Key: pathFile,
+        Key: filePath,
         Bucket: this.AWSConfig.awsS3BucketName,
         Body: file.buffer,
         ContentType: file.mimetype,
@@ -47,7 +47,16 @@ export class AwsService {
       }),
     );
 
-    return pathFile;
+    return filePath;
+  }
+
+  public async deleteFile(filePath: string) {
+    await this.client.send(
+      new DeleteObjectCommand({
+        Key: filePath,
+        Bucket: this.AWSConfig.awsS3BucketName,
+      }),
+    );
   }
 
   private buildPath(fileName: string, itemId: string, itemType: string): string {

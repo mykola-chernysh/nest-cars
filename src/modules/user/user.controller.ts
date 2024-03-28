@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -6,6 +6,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { IUserData } from '../auth/models/interfaces/user-data.interface';
 import { FileUploadDto } from '../aws/models/dto/request/file-upload.dto';
+import { FileValidationPipe } from '../aws/models/pipes/file-validation.pipe';
 import { UpdateUserRequestDto } from './models/dto/request/update-user.request.dto';
 import { UpdateUserAccountRequestDto } from './models/dto/request/update-user-account.request.dto';
 import { UpdateUserRoleRequestDto } from './models/dto/request/update-user-role.request.dto';
@@ -40,13 +41,10 @@ export class UserController {
   @ApiOperation({ summary: 'Update my avatar' })
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    description: 'user avatar',
-    type: FileUploadDto,
-  })
-  @Put('me/avatar')
+  @ApiBody({ description: 'user avatar', type: FileUploadDto })
+  @Post('me/avatar')
   public async uploadAvatar(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(new FileValidationPipe()) file: Express.Multer.File,
     @CurrentUser() userData: IUserData,
   ): Promise<UserResponseDto> {
     return await this.userService.uploadAvatar(file, userData);

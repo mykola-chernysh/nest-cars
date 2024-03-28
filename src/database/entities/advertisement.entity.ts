@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { ECurrency } from '../../common/enums/currency.enum';
 import { EAdStatus } from '../../modules/advertisement/models/enums/ads-status.enum';
 import { ERegion } from '../../modules/advertisement/models/enums/region.enum';
+import { ImageEntity } from './image.entity';
 import { BaseEntity } from './models/base.entity';
 import { UserEntity } from './user.entity';
 import { ViewEntity } from './view.entity';
@@ -61,4 +62,7 @@ export class AdvertisementEntity extends BaseEntity {
 
   @OneToMany(() => ViewEntity, (entity) => entity.advertisement)
   views?: ViewEntity[];
+
+  @OneToMany(() => ImageEntity, (entity) => entity.advertisement)
+  images?: ImageEntity[];
 }

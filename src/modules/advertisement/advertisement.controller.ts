@@ -1,5 +1,19 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Query,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { Roles } from '../../common/decorators/role.decorator';
 import { ERole } from '../../common/enums/role.enum';
@@ -9,6 +23,8 @@ import { LimitAccountGuard } from '../../common/guards/limit-account.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { IUserData } from '../auth/models/interfaces/user-data.interface';
+import { FilesUploadDto } from '../aws/models/dto/request/files-upload.dto';
+import { FilesValidationPipe } from '../aws/models/pipes/files-validation.pipe';
 import { AdvertisementListRequestDto } from './models/dto/request/advertisement-list.request.dto';
 import { CreateAdvertisementRequestDto } from './models/dto/request/create-advertisement.request.dto';
 import { UpdateAdvertisementRequestDto } from './models/dto/request/update-advertisement.request.dto';
@@ -31,13 +47,13 @@ export class AdvertisementController {
   @SkipAuth()
   @ApiOperation({ summary: 'Get one advertisement' })
   @Get(':adId')
-  public async getById(@Param('adId', ParseUUIDPipe) carId: string): Promise<AdvertisementResponseDto> {
-    return await this.advertisementService.getById(carId);
+  public async getById(@Param('adId', ParseUUIDPipe) adId: string): Promise<AdvertisementResponseDto> {
+    return await this.advertisementService.getById(adId);
   }
 
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Creating an advertisements' })
-  @Post('create-advert')
+  @Post('create')
   @Roles(ERole.SELLER, ERole.MANAGER, ERole.ADMIN)
   @UseGuards(BrandAndModelGuard, LimitAccountGuard, BadWordsGuard)
   public async createAd(
@@ -45,6 +61,21 @@ export class AdvertisementController {
     @CurrentUser() userData: IUserData,
   ): Promise<AdvertisementResponseDto> {
     return await this.advertisementService.createAd(dto, userData);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Upload advertisement images' })
+  @Post('images/:adId')
+  @UseInterceptors(FilesInterceptor('files'))
+  @Roles(ERole.SELLER, ERole.MANAGER, ERole.ADMIN)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ description: 'Upload advert images', type: FilesUploadDto })
+  public async uploadImages(
+    @Param('adId', ParseUUIDPipe) adId: string,
+    @CurrentUser() userData: IUserData,
+    @UploadedFiles(new FilesValidationPipe()) files: Array<Express.Multer.File>,
+  ): Promise<AdvertisementResponseDto> {
+    return await this.advertisementService.uploadImages(files, adId, userData);
   }
 
   @ApiBearerAuth()

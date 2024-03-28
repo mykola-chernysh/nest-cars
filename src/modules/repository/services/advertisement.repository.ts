@@ -14,6 +14,7 @@ export class AdvertisementRepository extends Repository<AdvertisementEntity> {
   public async getAll(query: AdvertisementListRequestDto): Promise<[AdvertisementEntity[], number]> {
     const qb = this.createQueryBuilder('advertisement');
     qb.leftJoinAndSelect('advertisement.user', 'user');
+    qb.leftJoinAndSelect('advertisement.images', 'images');
 
     qb.addOrderBy('advertisement.created', 'DESC');
     qb.take(query.limit);

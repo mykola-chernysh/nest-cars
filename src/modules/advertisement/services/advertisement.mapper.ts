@@ -24,6 +24,7 @@ export class AdvertisementMapper {
       created: advertisementEntity.created,
       updated: advertisementEntity.updated,
       user: advertisementEntity.user ? UserMapper.toResponseDto(advertisementEntity.user) : null,
+      images: advertisementEntity.images ? advertisementEntity.images : null,
     };
   }
 

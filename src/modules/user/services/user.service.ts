@@ -40,9 +40,14 @@ export class UserService {
 
   public async uploadAvatar(file: Express.Multer.File, userData: IUserData): Promise<UserResponseDto> {
     const userEntity = await this.userRepository.findOneBy({ id: userData.userId });
-    const pathFile = await this.awsService.uploadFile(file, userData.userId, EFileType.USER);
 
-    await this.userRepository.save({ ...userEntity, image: pathFile });
+    if (userEntity.image) {
+      await this.awsService.deleteFile(userEntity.image);
+    }
+
+    const filePath = await this.awsService.uploadFile(file, userData.userId, EFileType.USER);
+
+    await this.userRepository.save({ ...userEntity, image: filePath });
 
     return UserMapper.toResponseDto(userEntity);
   }

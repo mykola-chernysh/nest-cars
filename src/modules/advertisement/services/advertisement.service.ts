@@ -9,8 +9,11 @@ import {
 import { ERole } from '../../../common/enums/role.enum';
 import { AdvertisementEntity } from '../../../database/entities/advertisement.entity';
 import { IUserData } from '../../auth/models/interfaces/user-data.interface';
+import { EFileType } from '../../aws/models/enums/file-type.enum';
+import { AwsService } from '../../aws/services/aws.service';
 import { AdvertisementRepository } from '../../repository/services/advertisement.repository';
 import { CurrencyRepository } from '../../repository/services/currency.repository';
+import { ImageRepository } from '../../repository/services/image.repository';
 import { UserRepository } from '../../repository/services/user.repository';
 import { ViewRepository } from '../../repository/services/view.repository';
 import { AdvertisementListRequestDto } from '../models/dto/request/advertisement-list.request.dto';
@@ -25,8 +28,10 @@ import { AdvertisementMapper } from './advertisement.mapper';
 @Injectable()
 export class AdvertisementService {
   constructor(
+    private readonly awsService: AwsService,
     private readonly advertisementRepository: AdvertisementRepository,
     private readonly currencyRepository: CurrencyRepository,
+    private readonly imageRepository: ImageRepository,
     private readonly userRepository: UserRepository,
     private readonly viewRepository: ViewRepository,
   ) {}
@@ -40,7 +45,7 @@ export class AdvertisementService {
   public async getById(adId: string): Promise<AdvertisementResponseDto> {
     const adEntity = await this.advertisementRepository.findOne({
       where: { id: adId },
-      relations: { user: true },
+      relations: { user: true, images: true },
     });
 
     const convertedCurrency = await this.currencyConverter(+adEntity.price, adEntity.currency);
@@ -73,6 +78,21 @@ export class AdvertisementService {
     );
 
     return AdvertisementMapper.toResponseDto(adEntity);
+  }
+
+  public async updateAd(
+    adId: string,
+    userData: IUserData,
+    dto: UpdateAdvertisementRequestDto,
+  ): Promise<AdvertisementResponseDto> {
+    const adEntity = await this.findByIdOrThrow(adId, userData.userId);
+
+    const newAdEntity = await this.advertisementRepository.save({
+      ...adEntity,
+      ...dto,
+    });
+
+    return AdvertisementMapper.toResponseDto(newAdEntity);
   }
 
   public async getMyAd(myAdId: string, userDada: IUserData): Promise<AdvertisementResponseDto> {
@@ -114,19 +134,25 @@ export class AdvertisementService {
     return AdvertisementMapper.toListResponseDto(cars, total, query);
   }
 
-  public async updateAd(
+  public async uploadImages(
+    files: Express.Multer.File[],
     adId: string,
     userData: IUserData,
-    dto: UpdateAdvertisementRequestDto,
   ): Promise<AdvertisementResponseDto> {
     const adEntity = await this.findByIdOrThrow(adId, userData.userId);
 
-    const newAdEntity = await this.advertisementRepository.save({
-      ...adEntity,
-      ...dto,
-    });
+    for (const file of files) {
+      const path = await this.awsService.uploadFile(file, adId, EFileType.ADVERTISEMENT);
 
-    return AdvertisementMapper.toResponseDto(newAdEntity);
+      await this.imageRepository.save(
+        this.imageRepository.create({
+          image: path,
+          advertisement_id: adId,
+        }),
+      );
+    }
+
+    return AdvertisementMapper.toResponseDto(adEntity);
   }
 
   public async deleteAd(adId: string, userData: IUserData): Promise<void> {
