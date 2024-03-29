@@ -10,7 +10,7 @@ export class ImageEntity extends BaseEntity {
 
   @Column()
   advertisement_id: string;
-  @ManyToOne(() => AdvertisementEntity, (entity) => entity.image)
+  @ManyToOne(() => AdvertisementEntity, (entity) => entity.images)
   @JoinColumn({ name: 'advertisement_id' })
   advertisement?: AdvertisementEntity;
 }

@@ -44,9 +44,6 @@ export class AdvertisementEntity extends BaseEntity {
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'text', nullable: true })
-  image?: string;
-
   @Column({
     type: 'enum',
     enum: EAdStatus,

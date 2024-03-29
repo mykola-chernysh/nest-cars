@@ -1,8 +1,10 @@
 import { AdvertisementEntity } from '../../../database/entities/advertisement.entity';
+import { ImageEntity } from '../../../database/entities/image.entity';
 import { UserMapper } from '../../user/services/user.mapper';
 import { AdvertisementListRequestDto } from '../models/dto/request/advertisement-list.request.dto';
 import { AdvertisementResponseDto } from '../models/dto/response/advertisement.response.dto';
 import { AdvertisementListResponseDto } from '../models/dto/response/advertisement-list.response.dto';
+import { ImageResponseDto } from '../models/dto/response/image.response.dto';
 import { IConverter } from '../models/interface/currency-converter.interface';
 import { IView } from '../models/interface/view.interface';
 
@@ -19,12 +21,13 @@ export class AdvertisementMapper {
       currency: advertisementEntity.currency,
       region: advertisementEntity.region,
       description: advertisementEntity.description,
-      image: advertisementEntity.image,
       status: advertisementEntity.status,
       created: advertisementEntity.created,
       updated: advertisementEntity.updated,
       user: advertisementEntity.user ? UserMapper.toResponseDto(advertisementEntity.user) : null,
-      images: advertisementEntity.images ? advertisementEntity.images : null,
+      images: advertisementEntity.images
+        ? advertisementEntity.images.map(AdvertisementMapper.toImageResponseDto)
+        : null,
     };
   }
 
@@ -46,12 +49,13 @@ export class AdvertisementMapper {
       EUR: converter.EUR,
       region: advertisementEntity.region,
       description: advertisementEntity.description,
-      image: advertisementEntity.image,
       status: advertisementEntity.status,
       created: advertisementEntity.created,
       updated: advertisementEntity.updated,
       user: advertisementEntity.user ? UserMapper.toResponseDto(advertisementEntity.user) : null,
-      images: advertisementEntity.images ? advertisementEntity.images : null,
+      images: advertisementEntity.images
+        ? advertisementEntity.images.map(AdvertisementMapper.toImageResponseDto)
+        : null,
     };
   }
 
@@ -77,12 +81,23 @@ export class AdvertisementMapper {
       viewsPerMonth: views.viewsPerMonth,
       region: advertisementEntity.region,
       description: advertisementEntity.description,
-      image: advertisementEntity.image,
       status: advertisementEntity.status,
       created: advertisementEntity.created,
       updated: advertisementEntity.updated,
       user: advertisementEntity.user ? UserMapper.toResponseDto(advertisementEntity.user) : null,
-      images: advertisementEntity.images ? advertisementEntity.images : null,
+      images: advertisementEntity.images
+        ? advertisementEntity.images.map(AdvertisementMapper.toImageResponseDto)
+        : null,
+    };
+  }
+
+  public static toImageResponseDto(imageEntities: ImageEntity): ImageResponseDto {
+    return {
+      id: imageEntities.id,
+      image: imageEntities.image,
+      created: imageEntities.created,
+      updated: imageEntities.updated,
+      advertisement_id: imageEntities.advertisement_id,
     };
   }
 
