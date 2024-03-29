@@ -66,7 +66,7 @@ export class AdvertisementController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Upload advertisement images' })
   @Post('images/:adId')
-  @UseInterceptors(FilesInterceptor('files'))
+  @UseInterceptors(FilesInterceptor('files', 15))
   @Roles(ERole.SELLER, ERole.MANAGER, ERole.ADMIN)
   @ApiConsumes('multipart/form-data')
   @ApiBody({ description: 'Upload advert images', type: FilesUploadDto })
