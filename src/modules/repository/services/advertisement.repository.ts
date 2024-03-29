@@ -29,6 +29,7 @@ export class AdvertisementRepository extends Repository<AdvertisementEntity> {
   ): Promise<[AdvertisementEntity[], number]> {
     const qb = this.createQueryBuilder('advertisement');
     qb.leftJoinAndSelect('advertisement.user', 'user');
+    qb.leftJoinAndSelect('advertisement.images', 'images');
 
     qb.andWhere('advertisement.user_id = :myId');
     qb.setParameter('myId', userData.userId);
@@ -43,6 +44,7 @@ export class AdvertisementRepository extends Repository<AdvertisementEntity> {
   public async getMyAd(myAdId: string, userData: IUserData): Promise<AdvertisementEntity> {
     const qb = this.createQueryBuilder('advertisement');
     qb.leftJoinAndSelect('advertisement.user', 'user');
+    qb.leftJoinAndSelect('advertisement.images', 'images');
 
     qb.where('advertisement.id = :myAdId', { myAdId });
     qb.andWhere('advertisement.user_id = :myId', { myId: userData.userId });
